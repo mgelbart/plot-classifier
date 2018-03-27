@@ -68,7 +68,7 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, cmap=plt.cm.coolwarm, alpha=0.8)
     
     if proba:
-        cbar = fig.colorbar(cs)
+        cbar = plt.colorbar(cs)
         cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
     #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
     labels = np.unique(y)
