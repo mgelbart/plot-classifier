@@ -66,7 +66,7 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
 
     # can abstract some of this into a higher-level function for learners to call
     cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, cmap=plt.cm.coolwarm, alpha=0.8)
-    
+
     if proba:
         cbar = plt.colorbar(cs)
         cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
@@ -84,7 +84,7 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     ax.set_ylim(yy.min(), yy.max())
 #     ax.set_xlabel(data.feature_names[0])
 #     ax.set_ylabel(data.feature_names[1])
-    if ticks:
+    if not ticks:
         ax.set_xticks(())
         ax.set_yticks(())
 #     ax.set_title(title)
