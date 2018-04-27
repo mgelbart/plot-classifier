@@ -70,6 +70,8 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     if proba:
         cbar = plt.colorbar(cs)
         cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
+        cbar.ax.tick_params(labelsize=14)
+
     #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
     labels = np.unique(y)
     if len(labels) == 2:
