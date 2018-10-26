@@ -41,16 +41,15 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     if transformation is not None:
         X = transformation(X)
 
-    if proba:
-        if hasattr(clf, 'predict_proba'):
-            Z = clf.predict_proba(X)[:,-1]
-            Z = Z.reshape(xx.shape)
-            out = ax.imshow(Z,extent=(np.min(xx), np.max(xx), np.min(yy), np.max(yy)), origin='lower', vmin=0, vmax=1, **params)
-            ax.contour(xx, yy, Z, levels=[0.5])
-        else:
-            Z = clf.decision_function(X)
-            Z = Z.reshape(xx.shape)
-            out = ax.contourf(xx, yy, Z, **params)
+    if proba == "raw":
+        Z = clf.decision_function(X)
+        Z = Z.reshape(xx.shape)
+        out = ax.contourf(xx, yy, Z, **params)
+    elif proba:
+        Z = clf.predict_proba(X)[:,-1]
+        Z = Z.reshape(xx.shape)
+        out = ax.imshow(Z,extent=(np.min(xx), np.max(xx), np.min(yy), np.max(yy)), origin='lower', vmin=0, vmax=1, **params)
+        ax.contour(xx, yy, Z, levels=[0.5])
     else:
         Z = clf.predict(X)
         Z = Z.reshape(xx.shape)
@@ -58,7 +57,7 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     return out
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
-def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None): # assumes classifier "clf" is already fit
+def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, **kwargs): # assumes classifier "clf" is already fit
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
 
@@ -70,9 +69,13 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         show = False
 
     # can abstract some of this into a higher-level function for learners to call
-    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, cmap=plt.cm.coolwarm, alpha=0.8)
+    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, cmap=plt.cm.coolwarm, alpha=0.8, **kwargs)
 
-    if proba:
+    if proba == "raw":
+        cbar = plt.colorbar(cs)
+        cbar.ax.set_ylabel('raw model output', fontsize=20, rotation=270, labelpad=30)
+        cbar.ax.tick_params(labelsize=14)
+    elif proba:
         cbar = plt.colorbar(cs)
         cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
         cbar.ax.tick_params(labelsize=14)
