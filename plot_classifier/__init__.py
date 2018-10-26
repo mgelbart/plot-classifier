@@ -44,7 +44,9 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     if proba == "raw":
         Z = clf.decision_function(X)
         Z = Z.reshape(xx.shape)
-        out = ax.contourf(xx, yy, Z, **params)
+        # out = ax.contourf(xx, yy, Z, **params)
+        out = ax.imshow(Z,extent=(np.min(xx), np.max(xx), np.min(yy), np.max(yy)), origin='lower', **params)
+        ax.contour(xx, yy, Z, levels=[0])
     elif proba:
         Z = clf.predict_proba(X)[:,-1]
         Z = Z.reshape(xx.shape)
