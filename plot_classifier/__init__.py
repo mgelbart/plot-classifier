@@ -59,7 +59,7 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     return out
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
-def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, **kwargs): # assumes classifier "clf" is already fit
+def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, **kwargs): # assumes classifier "clf" is already fit
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
 
@@ -82,15 +82,16 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
         cbar.ax.tick_params(labelsize=14)
 
-    #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
-    labels = np.unique(y)
-    if len(labels) == 2:
-        ax.scatter(X0[y==labels[0]], X1[y==labels[0]], cmap=plt.cm.coolwarm, s=60, c='b', marker='o', edgecolors='k')
-        ax.scatter(X0[y==labels[1]], X1[y==labels[1]], cmap=plt.cm.coolwarm, s=60, c='r', marker='^', edgecolors='k')
-    else:
-        ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=50, edgecolors='k', linewidth=1)
-        # plt.legend(labels) # doesn't work
-        # see https://stackoverflow.com/questions/43967663/scatter-plot-with-legend-colored-by-group-without-multiple-calls-to-plt-scatter
+    if show_data:
+        #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
+        labels = np.unique(y)
+        if len(labels) == 2:
+            ax.scatter(X0[y==labels[0]], X1[y==labels[0]], cmap=plt.cm.coolwarm, s=60, c='b', marker='o', edgecolors='k')
+            ax.scatter(X0[y==labels[1]], X1[y==labels[1]], cmap=plt.cm.coolwarm, s=60, c='r', marker='^', edgecolors='k')
+        else:
+            ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=50, edgecolors='k', linewidth=1)
+            # plt.legend(labels) # doesn't work
+            # see https://stackoverflow.com/questions/43967663/scatter-plot-with-legend-colored-by-group-without-multiple-calls-to-plt-scatter
 
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
