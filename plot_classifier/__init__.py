@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def make_meshgrid(x, y, h=.02, lims=None):
+def make_meshgrid(x, y, num_pts=200, lims=None):
     """Create a mesh of points to plot in
 
     Parameters
@@ -20,8 +20,8 @@ def make_meshgrid(x, y, h=.02, lims=None):
         y_min, y_max = y.min() - 1, y.max() + 1
     else:
         x_min, x_max, y_min, y_max = lims
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
+    xx, yy = np.meshgrid(np.linspace(x_min, x_max, num_pts),
+                         np.linspace(y_min, y_max, num_pts))
     return xx, yy
 
 
