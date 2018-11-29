@@ -59,7 +59,7 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     return out
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
-def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, **kwargs): # assumes classifier "clf" is already fit
+def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, gray_photocopy=False, **kwargs): # assumes classifier "clf" is already fit
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
 
@@ -70,8 +70,14 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     else:
         show = False
 
+
+    if gray_photocopy:
+        kwargs["cmap"] = kwargs.get("cmap", plt.cm.YlOrRd) # default cmap for photocopied grayscale exams
+    else:
+        kwargs["cmap"] = kwargs.get("cmap", plt.cm.coolwarm) # default cmap, but user can overrule it
+
     # can abstract some of this into a higher-level function for learners to call
-    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, cmap=plt.cm.coolwarm, alpha=0.8, **kwargs)
+    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, alpha=0.8, **kwargs)
 
     if proba == "raw":
         cbar = plt.colorbar(cs)
@@ -86,8 +92,8 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
         labels = np.unique(y)
         if len(labels) == 2:
-            ax.scatter(X0[y==labels[0]], X1[y==labels[0]], cmap=plt.cm.coolwarm, s=60, c='b', marker='o', edgecolors='k')
-            ax.scatter(X0[y==labels[1]], X1[y==labels[1]], cmap=plt.cm.coolwarm, s=60, c='r', marker='^', edgecolors='k')
+            ax.scatter(X0[y==labels[0]], X1[y==labels[0]], s=60, c='b', marker='o', edgecolors='k')
+            ax.scatter(X0[y==labels[1]], X1[y==labels[1]], s=60, c='r', marker='^', edgecolors='k')
         else:
             ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=50, edgecolors='k', linewidth=1)
             # plt.legend(labels) # doesn't work
@@ -101,10 +107,10 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         ax.set_xticks(())
         ax.set_yticks(())
 #     ax.set_title(title)
-    if show:
-        plt.show()
-    else:
-        return ax
+    # if show:
+        # plt.show()
+    # else:
+    return ax
 
 def plot_4_classifiers(X, y, clfs):
 
