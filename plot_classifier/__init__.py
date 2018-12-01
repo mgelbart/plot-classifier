@@ -50,7 +50,7 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     elif proba:
         Z = clf.predict_proba(X)[:,-1]
         Z = Z.reshape(xx.shape)
-        out = ax.imshow(Z,extent=(np.min(xx), np.max(xx), np.min(yy), np.max(yy)), origin='lower', vmin=0, vmax=1, **params)
+        out = ax.imshow(Z,extent=(np.min(xx), np.max(xx), np.min(yy), np.max(yy)), origin='lower', vmin=0, vmax=1, aspect="auto", **params)
         ax.contour(xx, yy, Z, levels=[0.5])
     else:
         Z = clf.predict(X)
