@@ -59,7 +59,7 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
     return out
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
-def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, gray_photocopy=False, **kwargs): # assumes classifier "clf" is already fit
+def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, gray_photocopy=False, proba_showtitle=True, **kwargs): # assumes classifier "clf" is already fit
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
 
@@ -85,7 +85,8 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         cbar.ax.tick_params(labelsize=14)
     elif proba:
         cbar = plt.colorbar(cs)
-        cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
+        if proba_showtitle:
+            cbar.ax.set_ylabel('probability of red $\Delta$ class', fontsize=20, rotation=270, labelpad=30)
         cbar.ax.tick_params(labelsize=14)
 
     if show_data:
