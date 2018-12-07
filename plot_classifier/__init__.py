@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def make_meshgrid(x, y, num_pts=200, lims=None):
+def make_meshgrid(x, y, num_pts=300, lims=None):
     """Create a mesh of points to plot in
 
     Parameters
@@ -95,6 +95,10 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         if len(labels) == 2:
             ax.scatter(X0[y==labels[0]], X1[y==labels[0]], s=60, c='b', marker='o', edgecolors='k')
             ax.scatter(X0[y==labels[1]], X1[y==labels[1]], s=60, c='r', marker='^', edgecolors='k')
+        if len(labels) == 3:
+            ax.scatter(X0[y==labels[0]], X1[y==labels[0]], s=60, c='b', marker='o', edgecolors='k')
+            ax.scatter(X0[y==labels[1]], X1[y==labels[1]], s=60, c='r', marker='^', edgecolors='k')
+            ax.scatter(X0[y==labels[2]], X1[y==labels[2]], s=60, c='k', marker='x', edgecolors='k')
         else:
             ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=50, edgecolors='k', linewidth=1)
             # plt.legend(labels) # doesn't work
