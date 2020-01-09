@@ -25,7 +25,7 @@ def make_meshgrid(x, y, num_pts=300, lims=None):
     return xx, yy
 
 
-def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
+def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, labels=None, **params):
     """Plot the decision boundaries for a classifier.
 
     Parameters
@@ -54,12 +54,25 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, **params):
         ax.contour(xx, yy, Z, levels=[0.5])
     else:
         Z = clf.predict(X)
+
+        # in case the labels are strings instead of indices, convert them to numerical
+        if labels is not None:
+            Z2 = Z
+            for i, label in enumerate(labels):
+                Z2[Z2==label] = i
+            Z = Z2
+
         Z = Z.reshape(xx.shape)
         out = ax.contourf(xx, yy, Z, **params)
     return out
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
 def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, gray_photocopy=False, proba_showtitle=True, **kwargs): # assumes classifier "clf" is already fit
+    if isinstance(X, pd.DataFrame):
+        X = X.to_numpy()
+    if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
+        y = np.squeeze(y.to_numpy())
+
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
 
@@ -70,6 +83,7 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     else:
         show = False
 
+    labels = np.unique(y)
 
     if gray_photocopy:
         kwargs["cmap"] = kwargs.get("cmap", plt.cm.YlOrRd) # default cmap for photocopied grayscale exams
@@ -77,7 +91,7 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
         kwargs["cmap"] = kwargs.get("cmap", plt.cm.coolwarm) # default cmap, but user can overrule it
 
     # can abstract some of this into a higher-level function for learners to call
-    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, alpha=0.8, **kwargs)
+    cs = plot_contours(ax, clf, xx, yy, proba=proba, transformation=transformation, labels=labels, alpha=0.8, **kwargs)
 
     if proba == "raw":
         cbar = plt.colorbar(cs)
@@ -91,11 +105,10 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
 
     if show_data:
         #ax.scatter(X0, X1, c=y, cmap=plt.cm.coolwarm, s=30, edgecolors='k', linewidth=1)
-        labels = np.unique(y)
         if len(labels) == 2:
             ax.scatter(X0[y==labels[0]], X1[y==labels[0]], s=60, c='b', marker='o', edgecolors='k')
             ax.scatter(X0[y==labels[1]], X1[y==labels[1]], s=60, c='r', marker='^', edgecolors='k')
-        if len(labels) == 3:
+        elif len(labels) == 3:
             ax.scatter(X0[y==labels[0]], X1[y==labels[0]], s=60, c='b', marker='o', edgecolors='k')
             ax.scatter(X0[y==labels[1]], X1[y==labels[1]], s=60, c='r', marker='^', edgecolors='k')
             ax.scatter(X0[y==labels[2]], X1[y==labels[2]], s=60, c='k', marker='x', edgecolors='k')
