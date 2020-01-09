@@ -170,17 +170,3 @@ def plot_loss_diagram(labels_inside=False):
 
     plt.tight_layout()
 
-
-import numpy as np
-import pandas as pd
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
-model = DecisionTreeClassifier(max_depth=1)
-model
-df = pd.read_csv('/Users/mgelbart/git/330/home/lectures/data/cities_USA.csv', index_col=0)#.sample(6, random_state=100)
-X = df.drop(columns=['vote'])
-y = df[['vote']]
-model.fit(X, y)
-plt.figure()
-ax = plt.gca()
-plot_classifier(X, y, model, ax=ax, ticks=True);
-plt.savefig("TEST.png")
