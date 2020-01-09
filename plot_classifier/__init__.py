@@ -68,10 +68,15 @@ def plot_contours(ax, clf, xx, yy, proba=False, transformation=None, labels=None
 
 # adapted from http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html
 def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, transformation=None, show_data=True, gray_photocopy=False, proba_showtitle=True, **kwargs): # assumes classifier "clf" is already fit
-    if isinstance(X, pd.DataFrame):
+    try: 
         X = X.to_numpy()
-    if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
+    except:
+        pass
+    
+    try:
         y = np.squeeze(y.to_numpy())
+    except:
+        pass
 
     X0, X1 = X[:, 0], X[:, 1]
     xx, yy = make_meshgrid(X0, X1, lims=lims)
@@ -164,3 +169,18 @@ def plot_loss_diagram(labels_inside=False):
 
 
     plt.tight_layout()
+
+
+import numpy as np
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+model = DecisionTreeClassifier(max_depth=1)
+model
+df = pd.read_csv('/Users/mgelbart/git/330/home/lectures/data/cities_USA.csv', index_col=0)#.sample(6, random_state=100)
+X = df.drop(columns=['vote'])
+y = df[['vote']]
+model.fit(X, y)
+plt.figure()
+ax = plt.gca()
+plot_classifier(X, y, model, ax=ax, ticks=True);
+plt.savefig("TEST.png")
