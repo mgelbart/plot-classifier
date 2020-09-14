@@ -88,7 +88,10 @@ def plot_classifier(X, y, clf, ax=None, ticks=False, proba=False, lims=None, tra
     else:
         show = False
 
-    labels = np.unique(y)
+    if hasattr(clf, "classes_"):
+        labels = clf.classes_
+    else:
+        labels = np.unique(y)
 
     if gray_photocopy:
         kwargs["cmap"] = kwargs.get("cmap", plt.cm.YlOrRd) # default cmap for photocopied grayscale exams
